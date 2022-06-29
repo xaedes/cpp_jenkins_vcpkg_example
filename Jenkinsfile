@@ -8,14 +8,14 @@ pipeline {
         //     agent any
         //     steps {
         //         checkout scm
-        //         stash "source"
+        //         stash 'source'
         //     }
         // }
         stage('MultiPlatform') {
             parallel {
                 // stage('Windows') {
                 //     agent {
-                //         label "win"
+                //         label 'win'
                 //     }
                 //     when {
                 //         anyOf {
@@ -24,36 +24,36 @@ pipeline {
                 //         }
                 //     }
                 //     stages {
-                //         stage("scm") {
+                //         stage('scm') {
                 //             steps {
                 //                 checkout scm
                 //             }
                 //         }
-                //         stage("clean") {
+                //         stage('clean') {
                 //             steps {
-                //                 bat ".\\ci.bat clean"
+                //                 bat '.\\ci.bat clean'
                 //             }
                 //         }
-                //         stage("tools") {
+                //         stage('tools') {
                 //             steps {
-                //                 bat ".\\ci.bat tools"
+                //                 bat '.\\ci.bat tools'
                 //             }
                 //         }
-                //         stage("build") {
+                //         stage('build') {
                 //             steps {
-                //                 bat ".\\ci.bat build"
+                //                 bat '.\\ci.bat build'
                 //             }
                 //         }
-                //         stage("test") {
+                //         stage('test') {
                 //             steps {
-                //                 bat ".\\ci.bat test"
+                //                 bat '.\\ci.bat test'
                 //             }
                 //         }
                 //     }
                 // }
                 stage('Linux') {
                     agent {
-                        label "linux"
+                        label 'linux'
                     }
                     when {
                         anyOf {
@@ -62,34 +62,34 @@ pipeline {
                         }
                     }
                     stages {
-                        stage("scm") {
+                        stage('scm') {
                             steps {
-                                sh "pwd"
+                                sh 'pwd'
                                 checkout scm
                             }
                         }
-                        stage("cleanuu") {
+                        stage('clean') {
                             steps {
-                                sh "pwd"
-                                sh "./ci.sh clean"
+                                sh 'pwd'
+                                sh './ci.sh clean'
                             }
                         }
-                        stage("tools") {
+                        stage('tools') {
                             steps {
-                                sh "pwd"
-                                sh "./ci.sh tools"
+                                sh 'pwd'
+                                sh './ci.sh tools'
                             }
                         }
-                        stage("build") {
+                        stage('build') {
                             steps {
-                                sh "pwd"
-                                sh "./ci.sh build"
+                                sh 'pwd'
+                                sh './ci.sh build'
                             }
                         }
-                        stage("test") {
+                        stage('test') {
                             steps {
-                                sh "pwd"
-                                sh "./ci.sh test"
+                                sh 'pwd'
+                                sh './ci.sh test'
                             }
                         }
                     }
