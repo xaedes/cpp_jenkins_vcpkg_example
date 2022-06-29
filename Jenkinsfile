@@ -68,7 +68,7 @@ pipeline {
                                 checkout scm
                             }
                         }
-                        stage("clean") {
+                        stage("cleanuu") {
                             steps {
                                 sh "pwd"
                                 sh "./ci.sh clean"
