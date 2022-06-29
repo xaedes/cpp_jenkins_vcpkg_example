@@ -24,28 +24,28 @@ pipeline {
                         }
                     }
                     stages {
-                        stage('scm') {
+                        stage('scm-win') {
                             steps {
                                 unstash 'source'
                                 // checkout scm
                             }
                         }
-                        stage('clean') {
+                        stage('clean-win') {
                             steps {
                                 bat '.\\ci.bat clean'
                             }
                         }
-                        stage('tools') {
+                        stage('tools-win') {
                             steps {
                                 bat '.\\ci.bat tools'
                             }
                         }
-                        stage('build') {
+                        stage('build-win') {
                             steps {
                                 bat '.\\ci.bat build'
                             }
                         }
-                        stage('test') {
+                        stage('test-win') {
                             steps {
                                 bat '.\\ci.bat test'
                             }
@@ -63,28 +63,28 @@ pipeline {
                         }
                     }
                     stages {
-                        stage('scm') {
+                        stage('scm-linux') {
                             steps {
                                 unstash 'source'
                                 // checkout scm
                             }
                         }
-                        stage('clean') {
+                        stage('clean-linux') {
                             steps {
                                 sh 'sh ./ci.sh clean'
                             }
                         }
-                        stage('tools') {
+                        stage('tools-linux') {
                             steps {
                                 sh 'sh ./ci.sh tools'
                             }
                         }
-                        stage('build') {
+                        stage('build-linux') {
                             steps {
                                 sh 'sh ./ci.sh build'
                             }
                         }
-                        stage('test') {
+                        stage('test-linux') {
                             steps {
                                 sh 'sh ./ci.sh test'
                             }
