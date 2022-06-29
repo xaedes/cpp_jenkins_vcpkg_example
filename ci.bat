@@ -6,12 +6,18 @@ if [%~1]==[clean] goto clean
 if [%~1]==[tools] goto tools
 if [%~1]==[build] goto build
 if [%~1]==[test] goto test
+if [%~1]==[build_test] goto build_test
 if [%~1]==[help] goto help
-goto help
+goto build_test
 
 rem ---------------------------------------------------------------------------
 :all
 %~0 clean && %~0 tools && %~0 build && %~0 test
+goto exit
+
+rem ---------------------------------------------------------------------------
+:build_test
+%~0 build && %~0 test
 goto exit
 
 rem ---------------------------------------------------------------------------
@@ -60,7 +66,7 @@ goto exit
 rem ---------------------------------------------------------------------------
 :help
 echo Usage:
-echo %~0 [all^|clean^|tools^|build^|test^|help]
+echo %~0 [all^|clean^|tools^|build^|test^|build_test^|help]
 
 rem ---------------------------------------------------------------------------
 :exit
