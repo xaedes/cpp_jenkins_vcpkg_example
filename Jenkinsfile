@@ -64,32 +64,27 @@ pipeline {
                     stages {
                         stage('scm') {
                             steps {
-                                sh 'pwd'
                                 checkout scm
                             }
                         }
                         stage('clean') {
                             steps {
-                                sh 'pwd'
-                                sh 'ci.sh clean'
+                                sh 'bash ./ci.sh clean'
                             }
                         }
                         stage('tools') {
                             steps {
-                                sh 'pwd'
-                                sh './ci.sh tools'
+                                sh 'bash ./ci.sh tools'
                             }
                         }
                         stage('build') {
                             steps {
-                                sh 'pwd'
-                                sh './ci.sh build'
+                                sh 'bash ./ci.sh build'
                             }
                         }
                         stage('test') {
                             steps {
-                                sh 'pwd'
-                                sh './ci.sh test'
+                                sh 'bash ./ci.sh test'
                             }
                         }
                     }
