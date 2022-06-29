@@ -1,13 +1,13 @@
 @echo off
 
 rem ---------------------------------------------------------------------------
-if [%~1]==[all] goto all
-if [%~1]==[clean] goto clean
-if [%~1]==[tools] goto tools
-if [%~1]==[build] goto build
-if [%~1]==[test] goto test
-if [%~1]==[build_test] goto build_test
-if [%~1]==[help] goto help
+if [%~1]==[all]         goto all
+if [%~1]==[clean]       goto clean
+if [%~1]==[tools]       goto tools
+if [%~1]==[build]       goto build
+if [%~1]==[test]        goto test
+if [%~1]==[build_test]  goto build_test
+if [%~1]==[help]        goto help
 goto build_test
 
 rem ---------------------------------------------------------------------------
