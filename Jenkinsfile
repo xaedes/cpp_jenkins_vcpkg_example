@@ -65,26 +65,31 @@ pipeline {
                     stages {
                         stage("scm") {
                             steps {
+                                sh "pwd"
                                 unstash "source"
                             }
                         }
                         stage("clean") {
                             steps {
+                                sh "pwd"
                                 sh "./ci.sh clean"
                             }
                         }
                         stage("tools") {
                             steps {
+                                sh "pwd"
                                 sh "./ci.sh tools"
                             }
                         }
                         stage("build") {
                             steps {
+                                sh "pwd"
                                 sh "./ci.sh build"
                             }
                         }
                         stage("test") {
                             steps {
+                                sh "pwd"
                                 sh "./ci.sh test"
                             }
                         }
