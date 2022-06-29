@@ -3,6 +3,7 @@
 
 #include <example/example.h>
 
+#define ASSERT(condition) if(!(condition)) return -1;
 
 int perform_important_computation(int argc, char* argv[])
 {
@@ -12,7 +13,7 @@ int perform_important_computation(int argc, char* argv[])
     {
         int sum = 0;
         example::perform_important_computation(n[i], sum);
-        assert(sum == truth[i]);
+        ASSERT(sum == truth[i]);
     }
     return 0;
 }
