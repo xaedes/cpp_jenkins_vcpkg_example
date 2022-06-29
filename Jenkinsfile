@@ -69,22 +69,22 @@ pipeline {
                         }
                         stage('clean') {
                             steps {
-                                sh 'bash ./ci.sh clean'
+                                sh 'sh ./ci.sh clean'
                             }
                         }
                         stage('tools') {
                             steps {
-                                sh 'bash ./ci.sh tools'
+                                sh 'sh ./ci.sh tools'
                             }
                         }
                         stage('build') {
                             steps {
-                                sh 'bash ./ci.sh build'
+                                sh 'sh ./ci.sh build'
                             }
                         }
                         stage('test') {
                             steps {
-                                sh 'bash ./ci.sh test'
+                                sh 'sh ./ci.sh test'
                             }
                         }
                     }
