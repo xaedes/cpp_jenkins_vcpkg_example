@@ -32,22 +32,22 @@ pipeline {
                         }
                         stage("clean") {
                             steps {
-                                bat "jenkins.bat clean"
+                                bat ".\\ci.bat clean"
                             }
                         }
                         stage("tools") {
                             steps {
-                                bat "jenkins.bat tools"
+                                bat ".\\ci.bat tools"
                             }
                         }
                         stage("build") {
                             steps {
-                                bat "jenkins.bat build"
+                                bat ".\\ci.bat build"
                             }
                         }
                         stage("test") {
                             steps {
-                                bat "jenkins.bat test"
+                                bat ".\\ci.bat test"
                             }
                         }
                     }
@@ -70,22 +70,22 @@ pipeline {
                         }
                         stage("clean") {
                             steps {
-                                sh "jenkins.sh clean"
+                                sh "./ci.sh clean"
                             }
                         }
                         stage("tools") {
                             steps {
-                                sh "jenkins.sh tools"
+                                sh "./ci.sh tools"
                             }
                         }
                         stage("build") {
                             steps {
-                                sh "jenkins.sh build"
+                                sh "./ci.sh build"
                             }
                         }
                         stage("test") {
                             steps {
-                                sh "jenkins.sh test"
+                                sh "./ci.sh test"
                             }
                         }
                     }
