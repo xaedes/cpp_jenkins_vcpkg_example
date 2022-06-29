@@ -4,53 +4,54 @@ pipeline {
     }
     agent none
     stages {
-        // stage('scm') {
-        //     agent any
-        //     steps {
-        //         checkout scm
-        //         stash 'source'
-        //     }
-        // }
+        stage('scm') {
+            agent any
+            steps {
+                checkout scm
+                stash 'source'
+            }
+        }
         stage('MultiPlatform') {
             parallel {
-                // stage('Windows') {
-                //     agent {
-                //         label 'win'
-                //     }
-                //     when {
-                //         anyOf {
-                //             expression { params.PLATFORM_FILTER == 'all' }
-                //             expression { params.PLATFORM_FILTER == 'win' }
-                //         }
-                //     }
-                //     stages {
-                //         stage('scm') {
-                //             steps {
-                //                 checkout scm
-                //             }
-                //         }
-                //         stage('clean') {
-                //             steps {
-                //                 bat '.\\ci.bat clean'
-                //             }
-                //         }
-                //         stage('tools') {
-                //             steps {
-                //                 bat '.\\ci.bat tools'
-                //             }
-                //         }
-                //         stage('build') {
-                //             steps {
-                //                 bat '.\\ci.bat build'
-                //             }
-                //         }
-                //         stage('test') {
-                //             steps {
-                //                 bat '.\\ci.bat test'
-                //             }
-                //         }
-                //     }
-                // }
+                stage('Windows') {
+                    agent {
+                        label 'win'
+                    }
+                    when {
+                        anyOf {
+                            expression { params.PLATFORM_FILTER == 'all' }
+                            expression { params.PLATFORM_FILTER == 'win' }
+                        }
+                    }
+                    stages {
+                        stage('scm') {
+                            steps {
+                                unstash 'source'
+                                // checkout scm
+                            }
+                        }
+                        stage('clean') {
+                            steps {
+                                bat '.\\ci.bat clean'
+                            }
+                        }
+                        stage('tools') {
+                            steps {
+                                bat '.\\ci.bat tools'
+                            }
+                        }
+                        stage('build') {
+                            steps {
+                                bat '.\\ci.bat build'
+                            }
+                        }
+                        stage('test') {
+                            steps {
+                                bat '.\\ci.bat test'
+                            }
+                        }
+                    }
+                }
                 stage('Linux') {
                     agent {
                         label 'linux'
@@ -64,7 +65,8 @@ pipeline {
                     stages {
                         stage('scm') {
                             steps {
-                                checkout scm
+                                unstash 'source'
+                                // checkout scm
                             }
                         }
                         stage('clean') {
