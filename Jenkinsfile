@@ -71,7 +71,7 @@ pipeline {
                         stage('clean') {
                             steps {
                                 sh 'pwd'
-                                sh './ci.sh clean'
+                                sh 'ci.sh clean'
                             }
                         }
                         stage('tools') {
