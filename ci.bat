@@ -19,10 +19,25 @@ goto exit
 :clean
 echo Cleaning up...
 
+if exist "%~dp0\tools\" (
+    rmdir /Q /S "%~dp0\tools\"
+)
+if exist "%~dp0\build\" (
+    rmdir /Q /S "%~dp0\build\"
+)
+
 goto exit
 
 :tools
 echo Preparing tools...
+
+if not exist "%~dp0\tools\" (
+    mkdir "%~dp0\tools\"
+)
+if not exist "%~dp0\tools\vcpkg\vcpkg" (
+    git clone https://github.com/microsoft/vcpkg.git "%~dp0\\tools\\vcpkg\\"
+    "%~dp0\tools\vcpkg\bootstrap-vcpkg.bat" -disableMetrics
+)
 
 
 goto exit
@@ -30,12 +45,18 @@ goto exit
 :build
 echo Building...
 
-
+rem set VCPKG_FEATURE_FLAGS=versions
+set BUILD_TYPE=Release
+set VCPKG_TARGET_TRIPLET=x64-windows
+echo on
+cmake -B %~dp0\build\Windows\Win64 -G "Ninja" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%~dp0\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %~dp0
+cmake --build %~dp0\build\Windows\Win64
 goto exit
 
 :test
 echo Testing...
 
+ctest --test-dir "%~dp0\build\Windows\Win64\example_tests\" 
 
 goto exit
 
