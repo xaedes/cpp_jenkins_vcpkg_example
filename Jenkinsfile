@@ -5,6 +5,7 @@ pipeline {
     agent none
     stages {
         stage('scm') {
+            agent any
             steps {
                 checkout scm
                 stash "source"
