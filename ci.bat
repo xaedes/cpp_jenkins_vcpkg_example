@@ -51,12 +51,15 @@ set VCPKG_TARGET_TRIPLET=x64-windows
 echo on
 cmake -B %~dp0\build\Windows\Win64 -G "Ninja" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%~dp0\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %~dp0
 cmake --build %~dp0\build\Windows\Win64
+echo off
 goto exit
 
 :test
 echo Testing...
 
+echo on
 ctest --test-dir "%~dp0\build\Windows\Win64\example_tests\" 
+echo off
 
 goto exit
 
