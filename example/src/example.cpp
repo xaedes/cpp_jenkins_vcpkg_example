@@ -5,7 +5,7 @@ namespace example {
     void perform_important_computation(int n, int& result)
     {
         result = 0;
-        for (int i = 0; i <= n; ++i)
+        for (int i = 0; i < n; ++i)
         {
             result += i;
         }
