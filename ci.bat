@@ -3,19 +3,24 @@
 set BUILD_TYPE=Release
 set TARGET_TRIPLET=x64-windows
 set TESTS_PROJECT=example_tests
-
+set CMAKE_GENERATOR=Ninja
 set DIR=%~dp0
 
 rem ---------------------------------------------------------------------------
+if not [%~5]==[] set CMAKE_GENERATOR=%~5
 if not [%~4]==[] set TESTS_PROJECT=%~4
 if not [%~3]==[] set TARGET_TRIPLET=%~3
 if not [%~2]==[] set BUILD_TYPE=%~2
 
 echo %~0 %*
-echo BUILD_TYPE:     %BUILD_TYPE%
-echo TARGET_TRIPLET: %TARGET_TRIPLET%
-echo TESTS_PROJECT:  %TESTS_PROJECT%
-set ARGS=%BUILD_TYPE% %TARGET_TRIPLET% %TESTS_PROJECT%
+echo ---
+echo BUILD_TYPE:      %BUILD_TYPE%
+echo TARGET_TRIPLET:  %TARGET_TRIPLET%
+echo TESTS_PROJECT:   %TESTS_PROJECT%
+echo CMAKE_GENERATOR: %CMAKE_GENERATOR%
+echo ---
+set ARGS=%BUILD_TYPE% %TARGET_TRIPLET% %TESTS_PROJECT% %CMAKE_GENERATOR%
+
 rem ---------------------------------------------------------------------------
 if [%~1]==[all]         goto all
 if [%~1]==[clean]       goto clean
@@ -67,7 +72,7 @@ echo Building...
 rem set VCPKG_FEATURE_FLAGS=versions
 set VCPKG_TARGET_TRIPLET=%TARGET_TRIPLET%
 echo on
-cmake -B %DIR%\build\Windows\%TARGET_TRIPLET% -G "Ninja" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%DIR%\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %DIR%
+cmake -B %DIR%\build\Windows\%TARGET_TRIPLET% -G "%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%DIR%\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %DIR%
 cmake --build %DIR%\build\Windows\%TARGET_TRIPLET%
 @echo off
 goto exit
