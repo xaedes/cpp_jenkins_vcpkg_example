@@ -9,6 +9,7 @@ pipeline {
                 stash "source"
             }
         }
+        agent none
         stage('MultiPlatform') {
             parallel {
                 stage('Windows') {
