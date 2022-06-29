@@ -2,11 +2,13 @@ pipeline {
     parameters {
         choice(name: 'PLATFORM_FILTER', choices: ['all', 'linux', 'win'], description: 'Run on specific platform')
     }
-    agent {
-        checkout scm
-        stash "source"
-    }
     stages {
+        stage('scm') {
+            steps {
+                checkout scm
+                stash "source"
+            }
+        }
         stage('MultiPlatform') {
             parallel {
                 stage('Windows') {
@@ -22,6 +24,7 @@ pipeline {
                     stages {
                         stage("scm") {
                             steps {
+                            checkout scm
                                 unstash "source"
                             }
                         }
