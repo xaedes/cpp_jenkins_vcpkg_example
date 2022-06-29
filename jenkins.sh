@@ -21,11 +21,11 @@ function_help() {
 }
 
 case $1 in
-    all)   function_all;;
-    clean) function_clean;;
-    tools) function_tools;;
-    build) function_build;;
-    test)  function_test;;
-    help)  function_help;;
+    "all")   function_all;;
+    "clean") function_clean;;
+    "tools") function_tools;;
+    "build") function_build;;
+    "test")  function_test;;
+    "help")  function_help;;
     *)     function_help;;
 esac
