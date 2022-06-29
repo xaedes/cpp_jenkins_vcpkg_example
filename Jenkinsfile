@@ -4,13 +4,13 @@ pipeline {
     }
     agent none
     stages {
-        stage('scm') {
-            agent any
-            steps {
-                checkout scm
-                stash "source"
-            }
-        }
+        // stage('scm') {
+        //     agent any
+        //     steps {
+        //         checkout scm
+        //         stash "source"
+        //     }
+        // }
         stage('MultiPlatform') {
             parallel {
                 stage('Windows') {
@@ -26,8 +26,7 @@ pipeline {
                     stages {
                         stage("scm") {
                             steps {
-                            checkout scm
-                                unstash "source"
+                                checkout scm
                             }
                         }
                         stage("clean") {
@@ -66,7 +65,7 @@ pipeline {
                         stage("scm") {
                             steps {
                                 sh "pwd"
-                                unstash "source"
+                                checkout scm
                             }
                         }
                         stage("clean") {
