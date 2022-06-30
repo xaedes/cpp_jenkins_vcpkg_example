@@ -71,6 +71,9 @@ rem ---------------------------------------------------------------------------
 echo Building...
 rem set VCPKG_FEATURE_FLAGS=versions
 set VCPKG_TARGET_TRIPLET=%TARGET_TRIPLET%
+if not exist "%DIR%\build\Windows\%TARGET_TRIPLET%" (
+    mkdir "%DIR%\build\Windows\%TARGET_TRIPLET%"
+)
 echo on
 cd %DIR%\build\Windows\%TARGET_TRIPLET%
 cmake --version
