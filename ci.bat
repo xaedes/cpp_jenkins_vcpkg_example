@@ -72,7 +72,10 @@ echo Building...
 rem set VCPKG_FEATURE_FLAGS=versions
 set VCPKG_TARGET_TRIPLET=%TARGET_TRIPLET%
 echo on
-cmake -B %DIR%\build\Windows\%TARGET_TRIPLET% -G "%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%DIR%\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %DIR%
+cd %DIR%\build\Windows\%TARGET_TRIPLET%
+cmake --version
+cmake -G "%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=%DIR%\tools\vcpkg\scripts\buildsystems\vcpkg.cmake %DIR%
+cd %DIR%
 cmake --build %DIR%\build\Windows\%TARGET_TRIPLET%
 @echo off
 goto exit
@@ -81,7 +84,10 @@ rem ---------------------------------------------------------------------------
 :test
 echo Testing...
 echo on
-ctest --test-dir "%DIR%\build\Windows\%TARGET_TRIPLET%\%TESTS_PROJECT%\" 
+cd "%DIR%\build\Windows\%TARGET_TRIPLET%\%TESTS_PROJECT%\"
+ctest --version
+ctest
+cd %DIR%
 @echo off
 goto exit
 

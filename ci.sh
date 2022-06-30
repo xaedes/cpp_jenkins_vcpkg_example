@@ -89,6 +89,7 @@ function_build() {
     mkdir -p "$DIR/build/Linux/$TARGET_TRIPLET" || true
     cd "$DIR/build/Linux/$TARGET_TRIPLET" 
     pwd
+    echo cmake --version
     cmake --version
     echo cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
     cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
@@ -98,7 +99,9 @@ function_build() {
 function_test() {
     echo "Testing..."
     cd "$DIR/build/Linux/$TARGET_TRIPLET/$TESTS_PROJECT/"
+    echo ctest --version
     ctest --version
+    echo ctest
     ctest
     cd "$DIR"
 }
