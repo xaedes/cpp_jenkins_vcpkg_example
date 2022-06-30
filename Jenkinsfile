@@ -54,7 +54,7 @@ pipeline {
                 }
                 stage('Linux') {
                     agent {
-                        label 'linux'
+                        docker { image 'ubuntu:bionic' }
                     }
                     when {
                         anyOf {
