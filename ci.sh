@@ -86,12 +86,13 @@ function_build() {
     if [ $VCPKG_FORCE_SYSTEM_BINARIES -eq 1 ]; then
         export VCPKG_FORCE_SYSTEM_BINARIES=$VCPKG_FORCE_SYSTEM_BINARIES
     fi
-    echo cmake -B "$DIR/build/Linux/$TARGET_TRIPLET" -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    echo mkdir -p "$DIR/build/Linux/$TARGET_TRIPLET" || true
     mkdir -p "$DIR/build/Linux/$TARGET_TRIPLET" || true
-    cd "$DIR/build/Linux/$TARGET_TRIPLET"
-    cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    echo cd "$DIR/build/Linux/$TARGET_TRIPLET" && cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    cd "$DIR/build/Linux/$TARGET_TRIPLET" && cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    echo cd "$DIR"
     cd "$DIR"
-    # cmake -B "$DIR/build/Linux/$TARGET_TRIPLET" -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    echo cmake --build "$DIR/build/Linux/$TARGET_TRIPLET"
     cmake --build "$DIR/build/Linux/$TARGET_TRIPLET"
 }
 function_test() {
