@@ -70,6 +70,7 @@ pipeline {
                         stage('scm-linux') {
                             steps {
                                 unstash 'source'
+                                sh 'cmake --help'
                                 // checkout scm
                             }
                         }
