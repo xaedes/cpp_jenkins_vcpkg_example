@@ -66,7 +66,7 @@ pipeline {
                         stage('setup-system') {
                             steps {
                                 sh '''#!/bin/bash
-                                    sudo apt install git
+                                    apt install git
                                 '''
                             }
                         }
