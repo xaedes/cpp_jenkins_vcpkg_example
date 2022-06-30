@@ -96,6 +96,7 @@ function_build() {
 }
 function_test() {
     echo "Testing..."
+    find "$DIR/build/Linux/$TARGET_TRIPLET/$TESTS_PROJECT/" 
     echo ctest --test-dir "$DIR/build/Linux/$TARGET_TRIPLET/$TESTS_PROJECT/" 
     ctest --test-dir "$DIR/build/Linux/$TARGET_TRIPLET/$TESTS_PROJECT/" 
 }
