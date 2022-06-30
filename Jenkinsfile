@@ -70,7 +70,7 @@ pipeline {
                         stage('scm-linux') {
                             steps {
                                 unstash 'source'
-                                sh 'git clean -x -f -d'
+                                sh 'git clean -x -f -f -d'
                                 // sh 'git status'
                                 // sh 'cmake --version'
                                 // sh 'cmake --help'
