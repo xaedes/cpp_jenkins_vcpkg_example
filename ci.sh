@@ -86,6 +86,7 @@ function_build() {
     if [ $VCPKG_FORCE_SYSTEM_BINARIES -eq 1 ]; then
         export VCPKG_FORCE_SYSTEM_BINARIES=$VCPKG_FORCE_SYSTEM_BINARIES
     fi
+    echo cmake -B "$DIR/build/Linux/$TARGET_TRIPLET" -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
     cmake -B "$DIR/build/Linux/$TARGET_TRIPLET" -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
     cmake --build "$DIR/build/Linux/$TARGET_TRIPLET"
 }
