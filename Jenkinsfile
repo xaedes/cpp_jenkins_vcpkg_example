@@ -54,7 +54,11 @@ pipeline {
                 }
                 stage('Linux') {
                     agent {
-                        docker { image 'ubuntu:bionic' }
+                        dockerfile { 
+                            label 'linux'
+                            filename 'Dockerfile.ubuntu-bionic' 
+                            dir '.ci'
+                        }
                     }
                     when {
                         anyOf {
@@ -63,13 +67,6 @@ pipeline {
                         }
                     }
                     stages {
-                        stage('setup-system') {
-                            steps {
-                                sh '''#!/bin/bash
-                                    apt install git
-                                '''
-                            }
-                        }
                         stage('scm-linux') {
                             steps {
                                 unstash 'source'
