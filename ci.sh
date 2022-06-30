@@ -87,7 +87,10 @@ function_build() {
         export VCPKG_FORCE_SYSTEM_BINARIES=$VCPKG_FORCE_SYSTEM_BINARIES
     fi
     mkdir -p "$DIR/build/Linux/$TARGET_TRIPLET" || true
-    cd "$DIR/build/Linux/$TARGET_TRIPLET" && cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    cd "$DIR/build/Linux/$TARGET_TRIPLET" 
+    pwd
+    echo cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
+    cmake -G "$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$DIR/tools/vcpkg/scripts/buildsystems/vcpkg.cmake "$DIR"
     cd "$DIR"
     cmake --build "$DIR/build/Linux/$TARGET_TRIPLET"
 }
