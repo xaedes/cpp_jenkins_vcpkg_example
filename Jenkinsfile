@@ -27,7 +27,7 @@ pipeline {
                         stage('scm-win') {
                             steps {
                                 unstash 'source'
-                                // checkout scm
+                                bat 'git clean -x -f -f -d'
                             }
                         }
                         stage('clean-win') {
@@ -71,10 +71,6 @@ pipeline {
                             steps {
                                 unstash 'source'
                                 sh 'git clean -x -f -f -d'
-                                // sh 'git status'
-                                // sh 'cmake --version'
-                                // sh 'cmake --help'
-                                // checkout scm
                             }
                         }
                         stage('clean-linux') {
