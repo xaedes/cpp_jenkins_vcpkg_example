@@ -5,7 +5,7 @@ def deploy_badge_file_linux_agent(path, url) {
             sh '''#!/bin/bash
                 git clone git@github.com:xaedes/ci-status.git
                 git pull origin main
-                git clean -x -f -f -d
+                git status
             '''
             sh "wget -O '${path}' '${url}'"
             sh '''#!/bin/bash
@@ -15,22 +15,23 @@ def deploy_badge_file_linux_agent(path, url) {
     }
 }
 
-def deploy_badge_file_win_agent(path, url) {
-    dir ('ci-status') {
-        sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
-            bat '''
-                git clone git@github.com:xaedes/ci-status.git
-                git pull
-                git clean -x -f -f -d
-            '''
-            bat "wget -O '${path}' '${url}'"
-            bat '''
-                git status
-            '''
+// def deploy_badge_file_win_agent(path, url) {
+//     dir ('ci-status') {
+//         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
+//             bat '''
+//                 git clone git@github.com:xaedes/ci-status.git
+//                 git pull
+//                 git status
+//                 git clean -x -f -f -d
+//             '''
+//             bat "wget -O '${path}' '${url}'"
+//             bat '''
+//                 git status
+//             '''
 
-        }
-    }    
-}
+//         }
+//     }    
+// }
 
 def generate_badge_path(arch, distribution, build_type) {
     path = "xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
