@@ -6,7 +6,9 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 # rm -rf ci-status || true
                 git clone -b main git@github.com:xaedes/ci-status.git || true
                 cd ci-status
-                git pull origin main
+                git config user.email "xaedes+jenkins@gmail.com"
+                git config user.name "xaedes_jenkins"                
+                git --ff-only pull origin main
                 git clean -x -f -f -d
             '''
             sh "cd ci-status && mkdir -p \$(dirname ${path}) || true"
@@ -78,6 +80,9 @@ pipeline {
             }
         }
         stage('MultiPlatform') {
+            agent {
+                label 'deploy'
+            }
             matrix {
                 axes {
                     axis {
@@ -130,9 +135,17 @@ pipeline {
                     }
                 }
                 stages {
-                    stage('Windows-Badged') {
+                    stage('Prebuild') {
                         agent {
-                            label 'linux'
+                            label 'deploy'
+                        }
+                        steps {
+                            deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                        }
+                    }
+                    stage('Windows-Stage') {
+                        agent {
+                            any
                         }
                         when {
                             allOf {
@@ -144,11 +157,6 @@ pipeline {
                             }
                         }
                         stages {
-                            stage('Windows-Prebuild') {
-                                steps {
-                                    deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                                }
-                            }
                             stage('Windows-Build') {
                                 agent {
                                     label 'win'
@@ -183,19 +191,8 @@ pipeline {
                                 }
                             }
                         }
-                        post {
-                            success {
-                                echo "Success! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                            }
-                            failure {
-                                echo "Failure! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                            }
-                        }
-
                     }
-                    stage('Linux-Badged') {
+                    stage('Linux-Stage') {
                         agent {
                             label 'linux'
                         }
@@ -209,11 +206,6 @@ pipeline {
                             }
                         }
                         stages {
-                            stage('Linux-Prebuild') {
-                                steps {
-                                    deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                                }
-                            }
                             stage('Linux-Build') {
                                 agent {
                                     dockerfile { 
@@ -261,15 +253,15 @@ pipeline {
                                 }
                             }
                         }
-                        post {
-                            success {
-                                echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                            }
-                            failure {
-                                echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                            }
+                    }
+                    post {
+                        success {
+                            echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                            deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                        }
+                        failure {
+                            echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                            deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                         }
                     }
                 }
