@@ -5,8 +5,9 @@ def deploy_badge_file_linux_agent(path, url) {
         echo cd ci-status
         echo git pull
         echo git clean -x -f -f -d
-        echo wget -O \"${path}\" \"${url}\"
+        echo cd ..
     '''
+    sh "echo wget -O 'ci-status/${path}' '${url}'"
 }
 
 def deploy_badge_file_win_agent(path, url) {
@@ -15,8 +16,9 @@ def deploy_badge_file_win_agent(path, url) {
         echo cd ci-status
         echo git pull
         echo git clean -x -f -f -d
-        echo wget -O \"${path}\" \"${url}\"
+        echo cd ..
     '''
+    bat "echo wget -O 'ci-status\\${path}' '${url}'"
 }
 
 def generate_badge_path(arch, distribution, build_type) {
