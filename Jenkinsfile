@@ -28,7 +28,7 @@ pipeline {
                     }
                     axis {
                         name 'DOCKER_FILE'
-                        values 'Dockerfile.ubuntu-bionic'
+                        values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
                     }
                 }
                 excludes {
@@ -52,26 +52,16 @@ pipeline {
                             values 'x64-linux', 'x86-linux'
                         }
                     }
-                    // exclude {
-                    //     axis {
-                    //         name 'PLATFORM'
-                    //         values 'linux'
-                    //     }
-                    //     axis {
-                    //         name 'DOCKER_FILE'
-                    //         values 'none'
-                    //     }
-                    // }
-                    // exclude {
-                    //     axis {
-                    //         name 'PLATFORM'
-                    //         values 'win'
-                    //     }
-                    //     axis {
-                    //         name 'DOCKER_FILE'
-                    //         values 'Dockerfile.ubuntu-bionic'
-                    //     }
-                    // }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'DOCKER_FILE'
+                            values 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                        }
+                    }
                 }
                 stages {
 
