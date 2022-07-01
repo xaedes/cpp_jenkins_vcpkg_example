@@ -18,7 +18,7 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 git status
                 echo git add -A
             '''
-            sh "echo git commit -m \"update ci-status $slug\""
+            sh "echo git commit -m '$slug'"
             sh "echo git push origin main"
         }
     }
