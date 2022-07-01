@@ -1,6 +1,7 @@
 pipeline {
     parameters {
         choice(name: 'PLATFORM_FILTER', choices: ['all', 'linux', 'win'], description: 'Run on specific platform')
+        choice(name: 'DOCKER_FILE_FILTER', choices: ['all', 'ubuntu-bionic', 'ubuntu-focal', 'ubuntu-jammy', 'ubuntu-xenial'], description: 'Run on specific docker file')
     }
     agent none
     stages {
@@ -130,6 +131,10 @@ pipeline {
                                 anyOf {
                                     expression { params.PLATFORM_FILTER == 'all' }
                                     expression { params.PLATFORM_FILTER == 'linux' }
+                                }
+                                anyOf {
+                                    expression { params.DOCKER_FILE_FILTER == 'all' }
+                                    expression { params.DOCKER_FILE_FILTER == env.DOCKER_FILE }
                                 }
                                 expression { env.PLATFORM == 'linux' }
                             }
