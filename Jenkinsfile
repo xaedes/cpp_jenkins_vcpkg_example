@@ -107,69 +107,53 @@ pipeline {
                 axes {
                     axis {
                         name 'PLATFORM'
-                        values 'win'
+                        values 'linux', 'win'
                     }
                     axis {
                         name 'BUILD_TYPE'
-                        values 'Release'
+                        values 'Release', 'Debug'
                     }
                     axis {
                         name 'TARGET_TRIPLET'
-                        values 'x64-windows'
+                        values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
                     }
                     axis {
                         name 'DOCKER_FILE'
-                        values 'Dockerfile.ubuntu-bionic'
+                        values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
                     }
-                    // axis {
-                    //     name 'PLATFORM'
-                    //     values 'linux', 'win'
-                    // }
-                    // axis {
-                    //     name 'BUILD_TYPE'
-                    //     values 'Release', 'Debug'
-                    // }
-                    // axis {
-                    //     name 'TARGET_TRIPLET'
-                    //     values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
-                    // }
-                    // axis {
-                    //     name 'DOCKER_FILE'
-                    //     values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
-                    // }
                 }
-                // excludes {
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'linux'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-windows', 'x86-windows'
-                //         }
-                //     }
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'win'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-linux', 'x86-linux'
-                //         }
-                //     }
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'win'
-                //         }
-                //         axis {
-                //             name 'DOCKER_FILE'
-                //             values 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
-                //         }
-                //     }
-                // }
+                excludes {
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'linux'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-windows', 'x86-windows'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-linux', 'x86-linux'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'DOCKER_FILE'
+                            values 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                        }
+                    }
+                }
                 stages {
                     stage('Windows-Badged') {
                         agent {
