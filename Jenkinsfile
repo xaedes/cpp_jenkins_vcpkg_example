@@ -208,9 +208,7 @@ pipeline {
                         }
                     }
                     stage('Linux-Stage') {
-                        agent {
-                            label 'linux'
-                        }
+                        agent any
                         when {
                             allOf {
                                 anyOf {
