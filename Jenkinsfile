@@ -23,9 +23,9 @@ pipeline {
                         values 'Release', 'Debug'
                     }
                 }
-                excludes {
+                // excludes {
 
-                }
+                // }
                 stages {
 
                     stage('Windows') {
