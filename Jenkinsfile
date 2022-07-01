@@ -152,14 +152,14 @@ pipeline {
                 //     }
                 // }
                 stages {
-                    stage('Prebuild') {
-                        agent {
-                            label 'deploy'
-                        }
-                        steps {
-                            deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                        }
-                    }
+                    // stage('Prebuild') {
+                    //     agent {
+                    //         label 'deploy'
+                    //     }
+                    //     steps {
+                    //         deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                    //     }
+                    // }
                     stage('Windows-Stage') {
                         agent any
                         when {
