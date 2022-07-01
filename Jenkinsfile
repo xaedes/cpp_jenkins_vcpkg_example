@@ -7,6 +7,7 @@ def deploy_badge_file_linux_agent(path, url) {
                 git pull origin main
                 git status
             '''
+            sh "pwd"
             sh "mkdir -p \$(dirname ${path}) || true"
             sh "wget -O '${path}' '${url}'"
             sh '''#!/bin/bash
