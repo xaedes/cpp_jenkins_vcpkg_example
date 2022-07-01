@@ -5,7 +5,7 @@ def deploy_badge_file_linux_agent(path, url) {
         echo cd ci-status
         echo git pull
         echo git clean -x -f -f -d
-        echo wget -O "${path}" "${url}"
+        echo wget -O \"${path}\" \"${url}\"
     '''
 }
 
@@ -15,7 +15,7 @@ def deploy_badge_file_win_agent(path, url) {
         echo cd ci-status
         echo git pull
         echo git clean -x -f -f -d
-        echo wget -O "${path}" "${url}"
+        echo wget -O \"${path}\" \"${url}\"
     '''
 }
 
