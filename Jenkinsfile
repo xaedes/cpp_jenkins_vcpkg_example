@@ -60,7 +60,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "path: ${path}"
     echo "url: ${url}"
     if (platform == "win") {
-        path_win = path.replaceAll('/','\\')
+        path_win = path.replaceAll('/','\\\\')
         deploy_badge_file_win_agent(path_win, url)
     } else if (platform == "linux") {
         deploy_badge_file_linux_agent(path, url)
