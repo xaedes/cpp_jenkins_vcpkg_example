@@ -22,33 +22,57 @@ pipeline {
                         name 'BUILD_TYPE'
                         values 'Release', 'Debug'
                     }
-                    // axis {
-                    //     name 'TARGET_TRIPLET'
-                    //     values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
-                    // }
+                    axis {
+                        name 'TARGET_TRIPLET'
+                        values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
+                    }
+                    axis {
+                        name 'DOCKER_FILE'
+                        values 'none', 'Dockerfile.ubuntu-bionic'
+                    }
                 }
-                // excludes {
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'linux'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-windows', 'x86-windows'
-                //         }
-                //     }
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'win'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-linux', 'x86-linux'
-                //         }
-                //     }
-                // }
+                excludes {
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'linux'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-windows', 'x86-windows'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-linux', 'x86-linux'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'linux'
+                        }
+                        axis {
+                            name 'DOCKER_FILE'
+                            values 'none'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'DOCKER_FILE'
+                            values 'Dockerfile.ubuntu-bionic'
+                        }
+                    }
+                }
                 stages {
 
                     stage('Windows') {
@@ -97,7 +121,7 @@ pipeline {
                         agent {
                             dockerfile { 
                                 label 'linux'
-                                filename 'Dockerfile.ubuntu-bionic' 
+                                filename "${DOCKER_FILE}" 
                                 dir '.ci'
                             }
                         }
