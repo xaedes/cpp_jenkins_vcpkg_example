@@ -22,7 +22,8 @@ def deploy_badge_file_win_agent(path, url) {
 }
 
 def generate_badge_path(arch, distribution, build_type) {
-    return "ci-status/xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
+    path = "ci-status/xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
+    return path.replaceAll(":", "_")
 }
 def generate_badge_url(arch, distribution, build_type, color) {
     return "https://shields.io/badge/${arch}_${distribution}-${build_type}-${color}"
