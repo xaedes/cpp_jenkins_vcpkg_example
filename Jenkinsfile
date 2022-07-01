@@ -1,24 +1,33 @@
 
 def deploy_badge_file_linux_agent(path, url) {
     sh '''#!/bin/bash
-        echo git clone git@github.com:xaedes/ci-status.git
-        echo cd ci-status
-        echo git pull
-        echo git clean -x -f -f -d
-        echo cd ..
+        git clone git@github.com:xaedes/ci-status.git
+        cd ci-status
+        git pull
+        git clean -x -f -f -d
+        cd ..
     '''
-    sh "echo wget -O 'ci-status/${path}' '${url}'"
+    sh "wget -O 'ci-status/${path}' '${url}'"
+    sh '''#!/bin/bash
+        cd ci-status
+        git status
+    '''
+
 }
 
 def deploy_badge_file_win_agent(path, url) {
     bat '''
-        echo git clone git@github.com:xaedes/ci-status.git
-        echo cd ci-status
-        echo git pull
-        echo git clean -x -f -f -d
-        echo cd ..
+        git clone git@github.com:xaedes/ci-status.git
+        cd ci-status
+        git pull
+        git clean -x -f -f -d
+        cd ..
     '''
-    bat "echo wget -O 'ci-status\\${path}' '${url}'"
+    bat "wget -O 'ci-status\\${path}' '${url}'"
+    bat '''
+        cd ci-status
+        git status
+    '''
 }
 
 def generate_badge_path(arch, distribution, build_type) {
