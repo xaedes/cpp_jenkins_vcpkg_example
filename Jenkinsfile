@@ -6,11 +6,13 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 rm -rf ci-status || true
                 git clone -b main git@github.com:xaedes/ci-status.git
                 cd ci-status
+                pwd
                 git pull origin main
                 git status
                 git clean -x -f -f -d
                 git status
             '''
+            sh "git status"
             sh "pwd"
             sh "mkdir -p \$(dirname ${path}) || true"
             sh "wget -O '${path}' '${url}'"
