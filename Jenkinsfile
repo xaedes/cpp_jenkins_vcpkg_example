@@ -1,5 +1,5 @@
 
-def deploy_badge_file_win_agent(path, url) {
+def deploy_badge_file_linux_agent(path, url) {
     sh '''#!/bin/bash
         echo git clone git@github.com:xaedes/ci-status.git
         echo cd ci-status
@@ -9,7 +9,7 @@ def deploy_badge_file_win_agent(path, url) {
     '''
 }
 
-def deploy_badge_file_linux_agent(path, url) {
+def deploy_badge_file_win_agent(path, url) {
     bat '''
         echo git clone git@github.com:xaedes/ci-status.git
         echo cd ci-status
