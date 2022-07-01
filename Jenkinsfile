@@ -1,35 +1,57 @@
-def generate_badge_path(PLATFORM, BUILD_TYPE, TARGET_TRIPLET) {
-    return "ci-status/xaedes/cpp_jenkins_vcpkg_example/${PLATFORM}_${BUILD_TYPE}_${TARGET_TRIPLET}_status.svg"
+def generate_badge_path(arch, distribution, build_type) {
+    return "ci-status/xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
 }
-def generate_linux_badge_url(success) {
+def generate_badge_url(arch, distribution, build_type, color) {
     // return "https://shields.io/badge/x64%20ubuntu:bionic-Release-brightgreen"
     // return "https://shields.io/badge/x64_windows-Release-brightgreen"
     return "https://shields.io/badge/arch_platform-Release-brightgreen"
+    return "https://shields.io/badge/${arch}_${distribution}-${build_type}-${color}"
 }
-def generate_win_badge_url(success) {
-    // return "https://shields.io/badge/x64%20ubuntu:bionic-Release-brightgreen"
-    // return "https://shields.io/badge/x64_windows-Release-brightgreen"
-    return "https://shields.io/badge/arch_platform-Release-brightgreen"
-}
-def deploy_linux_badge(success, PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
-{
-    path = generate_badge_path(PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
-    url = generate_linux_badge_url(success)
 
-    echo "deploy_linux_badge"
-    echo "success: ${success}"
+def deploy_badge(status, platform, build_type, target_triplet, docker_file)
+{
+    def dockerfile_distributions = [
+        'Dockerfile.ubuntu-bionic' : 'ubuntu:bionic' , 
+        'Dockerfile.ubuntu-focal'  : 'ubuntu:focal'  , 
+        'Dockerfile.ubuntu-jammy'  : 'ubuntu:jammy'  , 
+        'Dockerfile.ubuntu-xenial' : 'ubuntu:xenial'     
+    ]
+    def triplet_archs = [
+        'x64-linux'   : 'x64' , 
+        'x86-linux'   : 'x86' , 
+        'x64-windows' : 'x64' , 
+        'x86-windows' : 'x86' 
+    ]
+    def status_colors = [
+        'success'  : 'brightgreen' , 
+        'failure'  : 'red'         , 
+        'building' : 'blue' 
+    ]
+
+    distribution = (platform == "win") ? "windows" : dockerfile_distributions[docker_file]
+    arch = triplet_archs[target_triplet]
+    color = status_colors[status]
+    
+    url = generate_badge_url(arch, distribution, build_type, color)
+    path = generate_badge_path(arch, distribution, build_type)
+
+    echo "deploy_badge"
+    echo "status: ${status}"
     echo "path: ${path}"
     echo "url: ${url}"
 }
-def deploy_win_badge(success, PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
-{
-    path = generate_badge_path(PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
-    url = generate_win_badge_url(success)
 
-    echo "deploy_win_badge"
-    echo "success: ${success}"
-    echo "path: ${path}"
-    echo "url: ${url}"
+def status_success()
+{
+    return "success"
+}
+def status_failure()
+{
+    return "failure"
+}
+def status_building()
+{
+    return "building"
 }
 pipeline {
     parameters {
@@ -117,6 +139,7 @@ pipeline {
                                 steps {
                                     unstash 'source'
                                     bat 'git clean -x -f -f -d'
+                                    deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 }
                             }
                             stage("clean-win") {
@@ -143,14 +166,14 @@ pipeline {
                         post {
                             success {
                                 echo "Success! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_win_badge(true, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
+                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 
                                 // sh "git clone git@github.com:xaedes/ci-status.git"
                                 // sh "sh cd ci-status && wget -O ci-status/xaedes/cpp_jenkins_vcpkg_example/${PLATFORM}_${BUILD_TYPE}_${TARGET_TRIPLET}_status.svg https://shields.io/badge/docker-ubuntu_bionic_x64-brightgreen "
                             }
                             failure {
                                 echo "Failure! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_win_badge(false, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
+                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                             }
                         }
                     }
@@ -180,6 +203,7 @@ pipeline {
                                 steps {
                                     unstash 'source'
                                     sh 'git clean -x -f -f -d'
+                                    deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 }
                             }
                             stage("clean-linux") {
@@ -206,11 +230,11 @@ pipeline {
                         post {
                             success {
                                 echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_linux_badge(true, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
+                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                             }
                             failure {
                                 echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_linux_badge(false, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
+                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                             }
                         }
                     }
