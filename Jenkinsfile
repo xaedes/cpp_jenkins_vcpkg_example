@@ -8,7 +8,7 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 cd ci-status
                 git config user.email "xaedes+jenkins@gmail.com"
                 git config user.name "xaedes_jenkins"                
-                git --ff-only pull origin main
+                git pull --ff-only origin main
                 git clean -x -f -f -d
             '''
             sh "cd ci-status && mkdir -p \$(dirname ${path}) || true"
@@ -75,7 +75,6 @@ pipeline {
     }
     stages {
         stage('scm') {
-            agent any
             steps {
                 checkout scm
                 stash 'source'
@@ -136,9 +135,9 @@ pipeline {
                 }
                 stages {
                     stage('Prebuild') {
-                        agent {
-                            label 'deploy'
-                        }
+                        // agent {
+                        //     label 'deploy'
+                        // }
                         steps {
                             deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                         }
