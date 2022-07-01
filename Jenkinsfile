@@ -1,33 +1,36 @@
 
 def deploy_badge_file_linux_agent(path, url) {
-    sh '''#!/bin/bash
-        git clone git@github.com:xaedes/ci-status.git
-        cd ci-status
-        git pull
-        git clean -x -f -f -d
-        cd ..
-    '''
-    sh "wget -O 'ci-status/${path}' '${url}'"
-    sh '''#!/bin/bash
-        cd ci-status
-        git status
-    '''
+    dir ('ci-status') {
+        sshagent('[f4eca40b-b91c-4b0b-80aa-c783b3be6692]') {
+            sh '''#!/bin/bash
+                git clone git@github.com:xaedes/ci-status.git
+                git pull
+                git clean -x -f -f -d
+            '''
+            // sh "wget -O '${path}' '${url}'"
+            // sh '''#!/bin/bash
+            //     git status
+            // '''
+        }
+    }
 
 }
 
 def deploy_badge_file_win_agent(path, url) {
-    bat '''
-        git clone git@github.com:xaedes/ci-status.git
-        cd ci-status
-        git pull
-        git clean -x -f -f -d
-        cd ..
-    '''
-    bat "wget -O 'ci-status\\${path}' '${url}'"
-    bat '''
-        cd ci-status
-        git status
-    '''
+    dir ('ci-status') {
+        sshagent('[f4eca40b-b91c-4b0b-80aa-c783b3be6692]') {
+            bat '''
+                git clone git@github.com:xaedes/ci-status.git
+                git pull
+                git clean -x -f -f -d
+            '''
+            // bat "wget -O '${path}' '${url}'"
+            // bat '''
+            //     git status
+            // '''
+
+        }
+    }    
 }
 
 def generate_badge_path(arch, distribution, build_type) {
