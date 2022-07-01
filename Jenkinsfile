@@ -7,10 +7,10 @@ def deploy_badge_file_linux_agent(path, url) {
                 git pull origin main
                 git clean -x -f -f -d
             '''
-            // sh "wget -O '${path}' '${url}'"
-            // sh '''#!/bin/bash
-            //     git status
-            // '''
+            sh "wget -O '${path}' '${url}'"
+            sh '''#!/bin/bash
+                git status
+            '''
         }
     }
 }
@@ -23,10 +23,10 @@ def deploy_badge_file_win_agent(path, url) {
                 git pull
                 git clean -x -f -f -d
             '''
-            // bat "wget -O '${path}' '${url}'"
-            // bat '''
-            //     git status
-            // '''
+            bat "wget -O '${path}' '${url}'"
+            bat '''
+                git status
+            '''
 
         }
     }    
