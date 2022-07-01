@@ -1,6 +1,5 @@
 
 def deploy_badge_file_linux_agent(path, url) {
-    sh "rm -rf ci-status"
     dir ('ci-status') {
         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             sh '''#!/bin/bash
@@ -18,8 +17,11 @@ def deploy_badge_file_linux_agent(path, url) {
                 cd ci-status
                 pwd
                 git status
-                find .
+                echo git add -A
+                echo git commit -m "update ci-status"
+                echo git push origin main
                 cd ..
+                find .
             '''
         }
     }
