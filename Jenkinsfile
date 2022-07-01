@@ -70,7 +70,9 @@ pipeline {
         choice(name: 'PLATFORM_FILTER', choices: ['all', 'linux', 'win'], description: 'Run on specific platform')
         choice(name: 'DOCKER_FILE_FILTER', choices: ['all', 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'], description: 'Run on specific docker file')
     }
-    agent none
+    agent {
+        label 'deploy'
+    }
     stages {
         stage('scm') {
             agent any
@@ -80,9 +82,7 @@ pipeline {
             }
         }
         stage('MultiPlatform') {
-            agent {
-                label 'deploy'
-            }
+
             matrix {
                 axes {
                     axis {
