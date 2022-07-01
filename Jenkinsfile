@@ -1,7 +1,7 @@
 
 def deploy_badge_file_linux_agent(path, url) {
     dir ('ci-status') {
-        sshagent('[f4eca40b-b91c-4b0b-80aa-c783b3be6692]') {
+        sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             sh '''#!/bin/bash
                 git clone git@github.com:xaedes/ci-status.git
                 git pull
@@ -18,7 +18,7 @@ def deploy_badge_file_linux_agent(path, url) {
 
 def deploy_badge_file_win_agent(path, url) {
     dir ('ci-status') {
-        sshagent('[f4eca40b-b91c-4b0b-80aa-c783b3be6692]') {
+        sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             bat '''
                 git clone git@github.com:xaedes/ci-status.git
                 git pull
