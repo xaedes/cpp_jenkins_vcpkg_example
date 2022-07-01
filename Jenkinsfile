@@ -72,7 +72,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "url: ${url}"
 
     deploy_badge_file_linux_agent(path, url)
-    
+
     // if (platform == "win") {
     //     path_win = path.replaceAll('/','\\\\')
     //     deploy_badge_file_win_agent(path_win, url)
@@ -235,7 +235,7 @@ pipeline {
                                     deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 }
                             }
-                            stage('Linux') {
+                            stage('Linux-Build') {
                                 agent {
                                     dockerfile { 
                                         label 'linux'
@@ -281,15 +281,15 @@ pipeline {
                                     // }
                                 }
                             }
-                            post {
-                                success {
-                                    echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                                }
-                                failure {
-                                    echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                                }
+                        }
+                        post {
+                            success {
+                                echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                            }
+                            failure {
+                                echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                             }
                         }
                     }
