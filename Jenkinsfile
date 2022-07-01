@@ -14,8 +14,8 @@ def deploy_badge_file_linux_agent(path, url, slug) {
             sh "cd ci-status && mkdir -p \$(dirname ${path}) || true"
             sh "cd ci-status && wget -O '${path}' '${url}'"
             sh "cd ci-status && git add '${path}'"
-            sh "cd ci-status && git -c 'user.email=xaedes+jenkins@gmail.com' -c 'user.name=xaedes_jenkins' commit -m '$slug'"
-            sh "cd ci-status && git push origin main"
+            sh "cd ci-status && git -c 'user.email=xaedes+jenkins@gmail.com' -c 'user.name=xaedes_jenkins' commit -m '$slug' && git push origin main || true"
+            
         }
     }
 }
