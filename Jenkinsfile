@@ -15,7 +15,7 @@ def deploy_linux_badge(success, PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
 {
     path = generate_badge_path(PLATFORM, BUILD_TYPE, TARGET_TRIPLET)
     url = generate_linux_badge_url(success)
-    
+
     echo "deploy_linux_badge"
     echo "success: ${success}"
     echo "path: ${path}"
@@ -143,14 +143,14 @@ pipeline {
                         post {
                             success {
                                 echo "Success! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_win_badge true env.PLATFORM  env.BUILD_TYPE  env.TARGET_TRIPLET 
+                                deploy_win_badge(true, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
                                 
                                 // sh "git clone git@github.com:xaedes/ci-status.git"
                                 // sh "sh cd ci-status && wget -O ci-status/xaedes/cpp_jenkins_vcpkg_example/${PLATFORM}_${BUILD_TYPE}_${TARGET_TRIPLET}_status.svg https://shields.io/badge/docker-ubuntu_bionic_x64-brightgreen "
                             }
                             failure {
                                 echo "Failure! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_win_badge false env.PLATFORM  env.BUILD_TYPE  env.TARGET_TRIPLET 
+                                deploy_win_badge(false, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
                             }
                         }
                     }
@@ -206,11 +206,11 @@ pipeline {
                         post {
                             success {
                                 echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_linux_badge true env.PLATFORM  env.BUILD_TYPE  env.TARGET_TRIPLET 
+                                deploy_linux_badge(true, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
                             }
                             failure {
                                 echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_linux_badge false env.PLATFORM  env.BUILD_TYPE  env.TARGET_TRIPLET 
+                                deploy_linux_badge(false, env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET)
                             }
                         }
                     }
