@@ -50,22 +50,22 @@ pipeline {
                             }
                             stage('clean-win') {
                                 steps {
-                                    bat '.\\ci.bat clean ${BUILD_TYPE}'
+                                    bat ".\\ci.bat clean ${BUILD_TYPE}"
                                 }
                             }
                             stage('tools-win') {
                                 steps {
-                                    bat '.\\ci.bat tools ${BUILD_TYPE}'
+                                    bat ".\\ci.bat tools ${BUILD_TYPE}"
                                 }
                             }
                             stage('build-win') {
                                 steps {
-                                    bat '.\\ci.bat build ${BUILD_TYPE}'
+                                    bat ".\\ci.bat build ${BUILD_TYPE}"
                                 }
                             }
                             stage('test-win') {
                                 steps {
-                                    bat '.\\ci.bat test ${BUILD_TYPE}'
+                                    bat ".\\ci.bat test ${BUILD_TYPE}"
                                 }
                             }
                         }
@@ -96,22 +96,22 @@ pipeline {
                             }
                             stage('clean-linux') {
                                 steps {
-                                    sh 'sh ./ci.sh clean ${BUILD_TYPE}'
+                                    sh "sh ./ci.sh clean ${BUILD_TYPE}"
                                 }
                             }
                             stage('tools-linux') {
                                 steps {
-                                    sh 'sh ./ci.sh tools ${BUILD_TYPE}'
+                                    sh "sh ./ci.sh tools ${BUILD_TYPE}"
                                 }
                             }
                             stage('build-linux') {
                                 steps {
-                                    sh 'sh ./ci.sh build ${BUILD_TYPE}'
+                                    sh "sh ./ci.sh build ${BUILD_TYPE}"
                                 }
                             }
                             stage('test-linux') {
                                 steps {
-                                    sh 'sh ./ci.sh test ${BUILD_TYPE}'
+                                    sh "sh ./ci.sh test ${BUILD_TYPE}"
                                 }
                             }
                         }
