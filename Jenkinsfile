@@ -17,12 +17,14 @@ def deploy_badge_file_linux_agent(path, url) {
                 cd ci-status
                 pwd
                 git status
-                git add -A
-                git commit -m "update ci-status"
-                git push origin main
+                echo git add -A
+                echo git commit -m "update ci-status"
+                echo git push origin main
                 cd ..
                 find .
+                cd ci-status
             '''
+            sh "pwd"
         }
     }
 }
