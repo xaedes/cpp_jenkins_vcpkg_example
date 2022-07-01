@@ -4,7 +4,7 @@ def generate_badge_path(arch, distribution, build_type) {
 def generate_badge_url(arch, distribution, build_type, color) {
     // return "https://shields.io/badge/x64%20ubuntu:bionic-Release-brightgreen"
     // return "https://shields.io/badge/x64_windows-Release-brightgreen"
-    return "https://shields.io/badge/arch_platform-Release-brightgreen"
+    // return "https://shields.io/badge/arch_platform-Release-brightgreen"
     return "https://shields.io/badge/${arch}_${distribution}-${build_type}-${color}"
 }
 
