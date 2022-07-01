@@ -18,7 +18,7 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 git status
                 echo git add -A
             '''
-            sh "echo git commit -m 'update ci-status $slug'"
+            sh "echo git commit -m \"update ci-status $slug\""
             sh "echo git push origin main"
         }
     }
@@ -81,7 +81,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "path: ${path}"
     echo "url: ${url}"
 
-    deploy_badge_file_linux_agent(path, url, "${arch}_${distribution}_${build_type}")
+    deploy_badge_file_linux_agent(path, url, path)
 
     // if (platform == "win") {
     //     path_win = path.replaceAll('/','\\\\')
