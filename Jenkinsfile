@@ -161,7 +161,7 @@ pipeline {
                     //     }
                     // }
                     stage('Windows-Stage') {
-                        agent any
+                        // agent any
                         when {
                             allOf {
                                 anyOf {
@@ -208,7 +208,7 @@ pipeline {
                         }
                     }
                     stage('Linux-Stage') {
-                        agent any
+                        // agent any
                         when {
                             allOf {
                                 anyOf {
