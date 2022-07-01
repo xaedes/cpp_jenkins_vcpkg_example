@@ -3,7 +3,7 @@ def deploy_badge_file_linux_agent(path, url) {
     dir ('ci-status') {
         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             sh '''#!/bin/bash
-                git clone git@github.com:xaedes/ci-status.git
+                git clone git@github.com:xaedes/ci-status.git .
                 git pull origin main
                 git status
             '''
