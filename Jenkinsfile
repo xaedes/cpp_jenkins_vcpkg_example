@@ -65,28 +65,28 @@ pipeline {
                             }
                         }
                         stages {
-                            stage(BUILD_TYPE == null ? "scm-win" : "scm-win ${BUILD_TYPE}") {
+                            stage("scm-win") {
                                 steps {
                                     unstash 'source'
                                     bat 'git clean -x -f -f -d'
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "clean-win" : "clean-win ${BUILD_TYPE}") {
+                            stage("clean-win") {
                                 steps {
                                     bat ".\\ci.bat clean ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "tools-win" : "tools-win ${BUILD_TYPE}") {
+                            stage("tools-win") {
                                 steps {
                                     bat ".\\ci.bat tools ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "build-win" : "build-win ${BUILD_TYPE}") {
+                            stage("build-win") {
                                 steps {
                                     bat ".\\ci.bat build ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "test-win" : "test-win ${BUILD_TYPE}") {
+                            stage("test-win") {
                                 steps {
                                     bat ".\\ci.bat test ${BUILD_TYPE}"
                                 }
@@ -111,28 +111,28 @@ pipeline {
                             }
                         }
                         stages {
-                            stage(BUILD_TYPE == null ? "scm-linux" : "scm-linux ${BUILD_TYPE}") {
+                            stage("scm-linux") {
                                 steps {
                                     unstash 'source'
                                     sh 'git clean -x -f -f -d'
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "clean-linux" : "clean-linux ${BUILD_TYPE}") {
+                            stage("clean-linux") {
                                 steps {
                                     sh "sh ./ci.sh clean ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "tools-linux" : "tools-linux ${BUILD_TYPE}") {
+                            stage("tools-linux") {
                                 steps {
                                     sh "sh ./ci.sh tools ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "build-linux" : "build-linux ${BUILD_TYPE}") {
+                            stage("build-linux") {
                                 steps {
                                     sh "sh ./ci.sh build ${BUILD_TYPE}"
                                 }
                             }
-                            stage(BUILD_TYPE == null ? "test-linux" : "test-linux ${BUILD_TYPE}") {
+                            stage("test-linux") {
                                 steps {
                                     sh "sh ./ci.sh test ${BUILD_TYPE}"
                                 }
