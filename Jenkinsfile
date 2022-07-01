@@ -16,11 +16,11 @@ pipeline {
                 axes {
                     axis {
                         name 'PLATFORM'
-                        value 'linux', 'win'
+                        values 'linux', 'win'
                     }
                     axis {
                         name 'BUILD_TYPE'
-                        value 'Release', 'Debug'
+                        values 'Release', 'Debug'
                     }
                 }
                 excludes {
