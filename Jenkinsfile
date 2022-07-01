@@ -13,13 +13,10 @@ def deploy_badge_file_linux_agent(path, url, slug) {
             sh "pwd"
             sh "mkdir -p \$(dirname ${path}) || true"
             sh "wget -O '${path}' '${url}'"
-            sh '''#!/bin/bash
-                pwd
-                git status
-                echo git add -A
-            '''
-            sh "echo git commit -m '$slug'"
-            sh "echo git push origin main"
+            sh "git status"
+            sh "git add '${path}'"
+            sh "git commit -m '$slug'"
+            sh "git push origin main"
         }
     }
 }
