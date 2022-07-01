@@ -22,9 +22,32 @@ pipeline {
                         name 'BUILD_TYPE'
                         values 'Release', 'Debug'
                     }
+                    // axis {
+                    //     name 'TARGET_TRIPLET'
+                    //     values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
+                    // }
                 }
                 // excludes {
-
+                //     exclude {
+                //         axis {
+                //             name 'PLATFORM'
+                //             values 'linux'
+                //         }
+                //         axis {
+                //             name 'TARGET_TRIPLET'
+                //             values 'x64-windows', 'x86-windows'
+                //         }
+                //     }
+                //     exclude {
+                //         axis {
+                //             name 'PLATFORM'
+                //             values 'win'
+                //         }
+                //         axis {
+                //             name 'TARGET_TRIPLET'
+                //             values 'x64-linux', 'x86-linux'
+                //         }
+                //     }
                 // }
                 stages {
 
@@ -42,28 +65,28 @@ pipeline {
                             }
                         }
                         stages {
-                            stage('scm-win') {
+                            stage("scm-win ${BUILD_TYPE}") {
                                 steps {
                                     unstash 'source'
                                     bat 'git clean -x -f -f -d'
                                 }
                             }
-                            stage('clean-win') {
+                            stage("clean-win ${BUILD_TYPE}") {
                                 steps {
                                     bat ".\\ci.bat clean ${BUILD_TYPE}"
                                 }
                             }
-                            stage('tools-win') {
+                            stage("tools-win ${BUILD_TYPE}") {
                                 steps {
                                     bat ".\\ci.bat tools ${BUILD_TYPE}"
                                 }
                             }
-                            stage('build-win') {
+                            stage("build-win ${BUILD_TYPE}") {
                                 steps {
                                     bat ".\\ci.bat build ${BUILD_TYPE}"
                                 }
                             }
-                            stage('test-win') {
+                            stage("test-win ${BUILD_TYPE}") {
                                 steps {
                                     bat ".\\ci.bat test ${BUILD_TYPE}"
                                 }
@@ -88,28 +111,28 @@ pipeline {
                             }
                         }
                         stages {
-                            stage('scm-linux') {
+                            stage("scm-linux ${BUILD_TYPE}") {
                                 steps {
                                     unstash 'source'
                                     sh 'git clean -x -f -f -d'
                                 }
                             }
-                            stage('clean-linux') {
+                            stage("clean-linux ${BUILD_TYPE}") {
                                 steps {
                                     sh "sh ./ci.sh clean ${BUILD_TYPE}"
                                 }
                             }
-                            stage('tools-linux') {
+                            stage("tools-linux ${BUILD_TYPE}") {
                                 steps {
                                     sh "sh ./ci.sh tools ${BUILD_TYPE}"
                                 }
                             }
-                            stage('build-linux') {
+                            stage("build-linux ${BUILD_TYPE}") {
                                 steps {
                                     sh "sh ./ci.sh build ${BUILD_TYPE}"
                                 }
                             }
-                            stage('test-linux') {
+                            stage("test-linux ${BUILD_TYPE}") {
                                 steps {
                                     sh "sh ./ci.sh test ${BUILD_TYPE}"
                                 }
