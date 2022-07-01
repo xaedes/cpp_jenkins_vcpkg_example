@@ -1,7 +1,7 @@
 pipeline {
     parameters {
         choice(name: 'PLATFORM_FILTER', choices: ['all', 'linux', 'win'], description: 'Run on specific platform')
-        choice(name: 'DOCKER_FILE_FILTER', choices: ['all', 'ubuntu-bionic', 'ubuntu-focal', 'ubuntu-jammy', 'ubuntu-xenial'], description: 'Run on specific docker file')
+        choice(name: 'DOCKER_FILE_FILTER', choices: ['all', 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'], description: 'Run on specific docker file')
     }
     agent none
     stages {
