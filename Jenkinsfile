@@ -13,7 +13,6 @@ def deploy_badge_file_linux_agent(path, url) {
             // '''
         }
     }
-
 }
 
 def deploy_badge_file_win_agent(path, url) {
@@ -71,12 +70,15 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "status: ${status}"
     echo "path: ${path}"
     echo "url: ${url}"
-    if (platform == "win") {
-        path_win = path.replaceAll('/','\\\\')
-        deploy_badge_file_win_agent(path_win, url)
-    } else if (platform == "linux") {
-        deploy_badge_file_linux_agent(path, url)
-    }
+
+    deploy_badge_file_linux_agent(path, url)
+    
+    // if (platform == "win") {
+    //     path_win = path.replaceAll('/','\\\\')
+    //     deploy_badge_file_win_agent(path_win, url)
+    // } else if (platform == "linux") {
+    //     deploy_badge_file_linux_agent(path, url)
+    // }
 }
 def status_success()  { return "success" }
 def status_failure()  { return "failure" }
@@ -149,10 +151,9 @@ pipeline {
                     }
                 }
                 stages {
-
-                    stage('Windows') {
+                    stage('Windows-Badged') {
                         agent {
-                            label 'win'
+                            label 'linux'
                         }
                         when {
                             allOf {
@@ -164,55 +165,60 @@ pipeline {
                             }
                         }
                         stages {
-                            stage("scm-win") {
+                            stage('Windows-Prebuild') {
                                 steps {
-                                    unstash 'source'
-                                    bat 'git clean -x -f -f -d'
                                     deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 }
                             }
-                            // stage("clean-win") {
-                            //     steps {
-                            //         bat ".\\ci.bat clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("tools-win") {
-                            //     steps {
-                            //         bat ".\\ci.bat tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("build-win") {
-                            //     steps {
-                            //         bat ".\\ci.bat build ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("test-win") {
-                            //     steps {
-                            //         bat ".\\ci.bat test ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
+                            stage('Windows-Build') {
+                                agent {
+                                    label 'win'
+                                }
+                                stages {
+                                    stage("scm-win") {
+                                        steps {
+                                            unstash 'source'
+                                            bat 'git clean -x -f -f -d'
+                                        }
+                                    }
+                                    // stage("clean-win") {
+                                    //     steps {
+                                    //         bat ".\\ci.bat clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("tools-win") {
+                                    //     steps {
+                                    //         bat ".\\ci.bat tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("build-win") {
+                                    //     steps {
+                                    //         bat ".\\ci.bat build ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("test-win") {
+                                    //     steps {
+                                    //         bat ".\\ci.bat test ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                }
+                            }
                         }
                         post {
                             success {
                                 echo "Success! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
                                 deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                                
-                                // sh "git clone git@github.com:xaedes/ci-status.git"
-                                // sh "sh cd ci-status && wget -O ci-status/xaedes/cpp_jenkins_vcpkg_example/${PLATFORM}_${BUILD_TYPE}_${TARGET_TRIPLET}_status.svg https://shields.io/badge/docker-ubuntu_bionic_x64-brightgreen "
                             }
                             failure {
                                 echo "Failure! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
                                 deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                             }
                         }
+
                     }
-                    stage('Linux') {
+                    stage('Linux-Badged') {
                         agent {
-                            dockerfile { 
-                                label 'linux'
-                                filename "${DOCKER_FILE}" 
-                                dir '.ci'
-                            }
+                            label 'linux'
                         }
                         when {
                             allOf {
@@ -220,50 +226,70 @@ pipeline {
                                     expression { params.PLATFORM_FILTER == 'all' }
                                     expression { params.PLATFORM_FILTER == 'linux' }
                                 }
-                                anyOf {
-                                    expression { params.DOCKER_FILE_FILTER == 'all' }
-                                    expression { params.DOCKER_FILE_FILTER == env.DOCKER_FILE }
-                                }
                                 expression { env.PLATFORM == 'linux' }
                             }
                         }
                         stages {
-                            stage("scm-linux") {
+                            stage('Linux-Prebuild') {
                                 steps {
-                                    unstash 'source'
-                                    sh 'git clean -x -f -f -d'
                                     deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
                                 }
                             }
-                            // stage("clean-linux") {
-                            //     steps {
-                            //         sh "sh ./ci.sh clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("tools-linux") {
-                            //     steps {
-                            //         sh "sh ./ci.sh tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("build-linux") {
-                            //     steps {
-                            //         sh "sh ./ci.sh build ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                            // stage("test-linux") {
-                            //     steps {
-                            //         sh "sh ./ci.sh test ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                            //     }
-                            // }
-                        }
-                        post {
-                            success {
-                                echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                            stage('Linux') {
+                                agent {
+                                    dockerfile { 
+                                        label 'linux'
+                                        filename "${DOCKER_FILE}" 
+                                        dir '.ci'
+                                    }
+                                }
+                                when {
+                                    allOf {
+                                        anyOf {
+                                            expression { params.DOCKER_FILE_FILTER == 'all' }
+                                            expression { params.DOCKER_FILE_FILTER == env.DOCKER_FILE }
+                                        }
+                                    }
+                                }
+                                stages {
+                                    stage("scm-linux") {
+                                        steps {
+                                            unstash 'source'
+                                            sh 'git clean -x -f -f -d'
+                                            deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                                        }
+                                    }
+                                    // stage("clean-linux") {
+                                    //     steps {
+                                    //         sh "sh ./ci.sh clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("tools-linux") {
+                                    //     steps {
+                                    //         sh "sh ./ci.sh tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("build-linux") {
+                                    //     steps {
+                                    //         sh "sh ./ci.sh build ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                    // stage("test-linux") {
+                                    //     steps {
+                                    //         sh "sh ./ci.sh test ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    //     }
+                                    // }
+                                }
                             }
-                            failure {
-                                echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                            post {
+                                success {
+                                    echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    deploy_badge(status_success(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                                }
+                                failure {
+                                    echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                    deploy_badge(status_failure(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                                }
                             }
                         }
                     }
