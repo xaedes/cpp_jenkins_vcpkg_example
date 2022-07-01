@@ -3,8 +3,8 @@ def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             sh '''#!/bin/bash
-                rm -rf ci-status || true
-                git clone -b main git@github.com:xaedes/ci-status.git
+                # rm -rf ci-status || true
+                git clone -b main git@github.com:xaedes/ci-status.git || true
                 cd ci-status
                 git pull origin main
                 git clean -x -f -f -d
@@ -17,24 +17,6 @@ def deploy_badge_file_linux_agent(path, url, slug) {
         }
     }
 }
-
-// def deploy_badge_file_win_agent(path, url) {
-//     dir ('ci-status') {
-//         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
-//             bat '''
-//                 git clone git@github.com:xaedes/ci-status.git
-//                 git pull
-//                 git status
-//                 git clean -x -f -f -d
-//             '''
-//             bat "wget -O '${path}' '${url}'"
-//             bat '''
-//                 git status
-//             '''
-
-//         }
-//     }    
-// }
 
 def generate_badge_path(arch, distribution, build_type) {
     path = "xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
@@ -76,13 +58,6 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "url: ${url}"
 
     deploy_badge_file_linux_agent(path, url, path)
-
-    // if (platform == "win") {
-    //     path_win = path.replaceAll('/','\\\\')
-    //     deploy_badge_file_win_agent(path_win, url)
-    // } else if (platform == "linux") {
-    //     deploy_badge_file_linux_agent(path, url)
-    // }
 }
 def status_success()  { return "success" }
 def status_failure()  { return "failure" }
