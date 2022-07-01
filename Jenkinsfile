@@ -6,6 +6,8 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 rm -rf ci-status || true
                 git clone git@github.com:xaedes/ci-status.git
                 cd ci-status
+                git config user.email "xaedes+jenkins@gmail.com"
+                git config user.name "xaedes_jenkins"
                 git pull origin main
                 git status
                 git clean -x -f -f -d
