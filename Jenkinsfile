@@ -9,15 +9,13 @@ def deploy_badge_file_linux_agent(path, url, slug) {
                 git pull origin main
                 git status
                 git clean -x -f -f -d
-                git config user.email "xaedes+jenkins@gmail.com"
-                git config user.name "xaedes_jenkins"
             '''
             sh "pwd"
             sh "mkdir -p \$(dirname ${path}) || true"
             sh "wget -O '${path}' '${url}'"
             sh "git status"
             sh "git add '${path}'"
-            sh "git commit -m '$slug'"
+            sh "git -c 'user.email=xaedes+jenkins@gmail.com' -c 'user.name=xaedes_jenkins' commit -m '$slug'"
             sh "git push origin main"
         }
     }
