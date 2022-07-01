@@ -1,30 +1,25 @@
 
-def deploy_badge_file_linux_agent(path, url) {
+def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
             sh '''#!/bin/bash
+                rm -rf ci-status || true
                 git clone git@github.com:xaedes/ci-status.git
                 cd ci-status
                 git pull origin main
                 git status
                 git clean -x -f -f -d
-                cd ..
             '''
             sh "pwd"
-            sh "mkdir -p ci-status/\$(dirname ${path}) || true"
-            sh "wget -O 'ci-status/${path}' '${url}'"
+            sh "mkdir -p \$(dirname ${path}) || true"
+            sh "wget -O '${path}' '${url}'"
             sh '''#!/bin/bash
-                cd ci-status
                 pwd
                 git status
                 echo git add -A
-                echo git commit -m "update ci-status"
-                echo git push origin main
-                cd ..
-                find .
-                cd ci-status
             '''
-            sh "pwd"
+            sh "echo git commit -m 'update ci-status $slug'"
+            sh "echo git push origin main"
         }
     }
 }
@@ -86,7 +81,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "path: ${path}"
     echo "url: ${url}"
 
-    deploy_badge_file_linux_agent(path, url)
+    deploy_badge_file_linux_agent(path, url, "${arch}_${distribution}_${build_type}")
 
     // if (platform == "win") {
     //     path_win = path.replaceAll('/','\\\\')
