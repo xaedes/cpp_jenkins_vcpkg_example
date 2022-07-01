@@ -11,7 +11,9 @@ def deploy_badge_file_linux_agent(path, url) {
             sh "mkdir -p \$(dirname ${path}) || true"
             sh "wget -O '${path}' '${url}'"
             sh '''#!/bin/bash
+                pwd
                 git status
+                find .
             '''
         }
     }
