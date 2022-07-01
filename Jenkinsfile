@@ -106,6 +106,16 @@ pipeline {
                                 }
                             }
                         }
+                        post {
+                            success {
+                                echo "Success! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                echo "todo: update badge"
+                            }
+                            failure {
+                                echo "Failure! ${PLATFORM} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                echo "todo: update badge"
+                            }
+                        }
                     }
                     stage('Linux') {
                         agent {
@@ -150,6 +160,16 @@ pipeline {
                                 steps {
                                     sh "sh ./ci.sh test ${BUILD_TYPE} ${TARGET_TRIPLET}"
                                 }
+                            }
+                        }
+                        post {
+                            success {
+                                echo "Success! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                echo "todo: update badge"
+                            }
+                            failure {
+                                echo "Failure! ${PLATFORM} ${DOCKER_FILE} ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                echo "todo: update badge"
                             }
                         }
                     }
