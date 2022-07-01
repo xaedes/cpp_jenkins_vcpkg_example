@@ -28,7 +28,7 @@ pipeline {
                     }
                     axis {
                         name 'DOCKER_FILE'
-                        values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                        values 'Dockerfile.ubuntu-xenial'
                     }
                 }
                 excludes {
