@@ -12,85 +12,107 @@ pipeline {
             }
         }
         stage('MultiPlatform') {
-            parallel {
-                stage('Windows') {
-                    agent {
-                        label 'win'
+            matrix {
+                axes {
+                    axis {
+                        name 'PLATFORM'
+                        value 'linux', 'win'
                     }
-                    when {
-                        anyOf {
-                            expression { params.PLATFORM_FILTER == 'all' }
-                            expression { params.PLATFORM_FILTER == 'win' }
-                        }
-                    }
-                    stages {
-                        stage('scm-win') {
-                            steps {
-                                unstash 'source'
-                                bat 'git clean -x -f -f -d'
-                            }
-                        }
-                        stage('clean-win') {
-                            steps {
-                                bat '.\\ci.bat clean'
-                            }
-                        }
-                        stage('tools-win') {
-                            steps {
-                                bat '.\\ci.bat tools'
-                            }
-                        }
-                        stage('build-win') {
-                            steps {
-                                bat '.\\ci.bat build'
-                            }
-                        }
-                        stage('test-win') {
-                            steps {
-                                bat '.\\ci.bat test'
-                            }
-                        }
+                    axis {
+                        name 'BUILD_TYPE'
+                        value 'Release', 'Debug'
                     }
                 }
-                stage('Linux') {
-                    agent {
-                        dockerfile { 
-                            label 'linux'
-                            filename 'Dockerfile.ubuntu-bionic' 
-                            dir '.ci'
+                excludes {
+
+                }
+                stages {
+
+                    stage('Windows') {
+                        agent {
+                            label 'win'
+                        }
+                        when {
+                            allOf {
+                                anyOf {
+                                    expression { params.PLATFORM_FILTER == 'all' }
+                                    expression { params.PLATFORM_FILTER == 'win' }
+                                }
+                                expression { env.PLATFORM == 'win' }
+                            }
+                        }
+                        stages {
+                            stage('scm-win') {
+                                steps {
+                                    unstash 'source'
+                                    bat 'git clean -x -f -f -d'
+                                }
+                            }
+                            stage('clean-win') {
+                                steps {
+                                    bat '.\\ci.bat clean ${BUILD_TYPE}'
+                                }
+                            }
+                            stage('tools-win') {
+                                steps {
+                                    bat '.\\ci.bat tools ${BUILD_TYPE}'
+                                }
+                            }
+                            stage('build-win') {
+                                steps {
+                                    bat '.\\ci.bat build ${BUILD_TYPE}'
+                                }
+                            }
+                            stage('test-win') {
+                                steps {
+                                    bat '.\\ci.bat test ${BUILD_TYPE}'
+                                }
+                            }
                         }
                     }
-                    when {
-                        anyOf {
-                            expression { params.PLATFORM_FILTER == 'all' }
-                            expression { params.PLATFORM_FILTER == 'linux' }
-                        }
-                    }
-                    stages {
-                        stage('scm-linux') {
-                            steps {
-                                unstash 'source'
-                                sh 'git clean -x -f -f -d'
+                    stage('Linux') {
+                        agent {
+                            dockerfile { 
+                                label 'linux'
+                                filename 'Dockerfile.ubuntu-bionic' 
+                                dir '.ci'
                             }
                         }
-                        stage('clean-linux') {
-                            steps {
-                                sh 'sh ./ci.sh clean'
+                        when {
+                            allOf {
+                                anyOf {
+                                    expression { params.PLATFORM_FILTER == 'all' }
+                                    expression { params.PLATFORM_FILTER == 'linux' }
+                                }
+                                expression { env.PLATFORM == 'linux' }
                             }
                         }
-                        stage('tools-linux') {
-                            steps {
-                                sh 'sh ./ci.sh tools'
+                        stages {
+                            stage('scm-linux') {
+                                steps {
+                                    unstash 'source'
+                                    sh 'git clean -x -f -f -d'
+                                }
                             }
-                        }
-                        stage('build-linux') {
-                            steps {
-                                sh 'sh ./ci.sh build'
+                            stage('clean-linux') {
+                                steps {
+                                    sh 'sh ./ci.sh clean ${BUILD_TYPE}'
+                                }
                             }
-                        }
-                        stage('test-linux') {
-                            steps {
-                                sh 'sh ./ci.sh test'
+                            stage('tools-linux') {
+                                steps {
+                                    sh 'sh ./ci.sh tools ${BUILD_TYPE}'
+                                }
+                            }
+                            stage('build-linux') {
+                                steps {
+                                    sh 'sh ./ci.sh build ${BUILD_TYPE}'
+                                }
+                            }
+                            stage('test-linux') {
+                                steps {
+                                    sh 'sh ./ci.sh test ${BUILD_TYPE}'
+                                }
                             }
                         }
                     }
