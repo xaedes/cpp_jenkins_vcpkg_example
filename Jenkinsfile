@@ -1,13 +1,30 @@
+
+def deploy_badge_file_win_agent(path, url) {
+    sh '''#!/bin/bash
+        echo git clone git@github.com:xaedes/ci-status.git
+        echo cd ci-status
+        echo git pull
+        echo git clean -x -f -f -d
+        echo wget -O '${path}' ${url}"
+    '''
+}
+
+def deploy_badge_file_linux_agent(path, url) {
+    bat '''
+        echo git clone git@github.com:xaedes/ci-status.git
+        echo cd ci-status
+        echo git pull
+        echo git clean -x -f -f -d
+        echo wget -O '${path}' ${url}"
+    '''
+}
+
 def generate_badge_path(arch, distribution, build_type) {
     return "ci-status/xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
 }
 def generate_badge_url(arch, distribution, build_type, color) {
-    // return "https://shields.io/badge/x64%20ubuntu:bionic-Release-brightgreen"
-    // return "https://shields.io/badge/x64_windows-Release-brightgreen"
-    // return "https://shields.io/badge/arch_platform-Release-brightgreen"
     return "https://shields.io/badge/${arch}_${distribution}-${build_type}-${color}"
 }
-
 def deploy_badge(status, platform, build_type, target_triplet, docker_file)
 {
     def dockerfile_distributions = [
@@ -32,27 +49,23 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     arch = triplet_archs[target_triplet]
     color = status_colors[status]
     
-    url = generate_badge_url(arch, distribution, build_type, color)
     path = generate_badge_path(arch, distribution, build_type)
+    url = generate_badge_url(arch, distribution, build_type, color)
 
     echo "deploy_badge"
     echo "status: ${status}"
     echo "path: ${path}"
     echo "url: ${url}"
+    if (platform == "win") {
+        deploy_badge_file_win_agent(path, url)
+    } else if (platform == "linux") {
+        deploy_badge_file_linux_agent(path, url)
+    }
 }
+def status_success()  { return "success" }
+def status_failure()  { return "failure" }
+def status_building() { return "building" }
 
-def status_success()
-{
-    return "success"
-}
-def status_failure()
-{
-    return "failure"
-}
-def status_building()
-{
-    return "building"
-}
 pipeline {
     parameters {
         choice(name: 'PLATFORM_FILTER', choices: ['all', 'linux', 'win'], description: 'Run on specific platform')
