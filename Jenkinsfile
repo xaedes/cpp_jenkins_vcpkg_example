@@ -1,7 +1,7 @@
 
 def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
-        withCredentials([sshUserPrivateKey(credentialsId: 'f4eca40b-b91c-4b0b-80aa-c783b3be6692', keyFileVariable: 'SSH_KEY_FILE')]) {
+        withCredentials([sshUserPrivateKey(credentialsId: '53482129-4785-47b8-b139-9b8e7558cf1e', keyFileVariable: 'SSH_KEY_FILE')]) {
             sh """
                 echo "\$JENKINS_URL"
                 md5sum "\$SSH_KEY_FILE"
