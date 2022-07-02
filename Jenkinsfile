@@ -1,12 +1,17 @@
 
-def deploy_badge_file_linux_agent(path, url, slug) {
+def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
     dir ('ci-status') {
         withCredentials([sshUserPrivateKey(credentialsId: 'cistatus-deploy', keyFileVariable: 'SSH_KEY_FILE')]) {
             sh """
                 ssh -i "\$SSH_KEY_FILE" -p 2122 -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
                     cd ~/files/
+                    mkdir -p ${cache_dir} || true
                     mkdir -p \$(dirname ${path}) || true
-                    wget -O "${path}" "${url}"
+                    CACHED="${cache_dir}/\$(echo ${url} | cut -d/ -f5 | tr :- _)"
+                    if [ ! -f "\${CACHED}" ]; then
+                        wget -O "\${CACHED}" "${url}"
+                    fi
+                    cp -f "\${CACHED}" "${path}"
                 '
             """
         }
