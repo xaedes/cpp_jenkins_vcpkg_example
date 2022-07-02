@@ -5,7 +5,7 @@ def deploy_badge_file_linux_agent(path, url, slug) {
             sh """
                 echo "\$JENKINS_URL"
                 md5sum "\$SSH_KEY_FILE"
-                ssh -i "\$SSH_KEY_FILE" -p 2122 cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
+                ssh -i "\$SSH_KEY_FILE" -p 2122 -o BatchMode=yes cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
                     cd ~/files/
                     mkdir -p \$(dirname ${path}) || true
                     wget -O "${path}" "${url}"
