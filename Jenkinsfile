@@ -3,26 +3,13 @@ def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
         withCredentials([sshUserPrivateKey(credentialsId: 'cistatus-deploy', keyFileVariable: 'SSH_KEY_FILE')]) {
             sh """
-                echo "\$JENKINS_URL"
-                md5sum "\$SSH_KEY_FILE"
                 ssh -i "\$SSH_KEY_FILE" -p 2122 -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
                     cd ~/files/
                     mkdir -p \$(dirname ${path}) || true
                     wget -O "${path}" "${url}"
                 '
             """
-            
         }
-        // sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
-        //     sh """
-        //         echo "${env.JENKINS_URL}"
-        //         ssh -p 2122 cistatus@\$(echo ${env.JENKINS_URL} | cut -d'/' -f3 | cut -d':' -f1) '
-        //             mkdir -p \$(dirname ${path}) || true
-        //             wget -O "${path}" "${url}"
-        //         '
-        //     """
-            
-        // }
     }
 }
 
@@ -90,83 +77,83 @@ pipeline {
         stage('MultiPlatform') {
 
             matrix {
-                axes {
-                    axis {
-                        name 'PLATFORM'
-                        values 'linux'
-                    }
-                    axis {
-                        name 'BUILD_TYPE'
-                        values 'Release'
-                    }
-                    axis {
-                        name 'TARGET_TRIPLET'
-                        values 'x64-linux'
-                    }
-                    axis {
-                        name 'DOCKER_FILE'
-                        values 'Dockerfile.ubuntu-bionic'
-                    }
-                }
                 // axes {
                 //     axis {
                 //         name 'PLATFORM'
-                //         values 'linux', 'win'
+                //         values 'linux'
                 //     }
                 //     axis {
                 //         name 'BUILD_TYPE'
-                //         values 'Release', 'Debug'
+                //         values 'Release'
                 //     }
                 //     axis {
                 //         name 'TARGET_TRIPLET'
-                //         values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
+                //         values 'x64-linux'
                 //     }
                 //     axis {
                 //         name 'DOCKER_FILE'
-                //         values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                //         values 'Dockerfile.ubuntu-bionic'
                 //     }
                 // }
-                // excludes {
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'linux'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-windows', 'x86-windows'
-                //         }
-                //     }
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'win'
-                //         }
-                //         axis {
-                //             name 'TARGET_TRIPLET'
-                //             values 'x64-linux', 'x86-linux'
-                //         }
-                //     }
-                //     exclude {
-                //         axis {
-                //             name 'PLATFORM'
-                //             values 'win'
-                //         }
-                //         axis {
-                //             name 'DOCKER_FILE'
-                //             values 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
-                //         }
-                //     }
-                // }
+                axes {
+                    axis {
+                        name 'PLATFORM'
+                        values 'linux', 'win'
+                    }
+                    axis {
+                        name 'BUILD_TYPE'
+                        values 'Release', 'Debug'
+                    }
+                    axis {
+                        name 'TARGET_TRIPLET'
+                        values 'x64-linux', 'x86-linux', 'x64-windows', 'x86-windows'
+                    }
+                    axis {
+                        name 'DOCKER_FILE'
+                        values 'Dockerfile.ubuntu-bionic', 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                    }
+                }
+                excludes {
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'linux'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-windows', 'x86-windows'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'TARGET_TRIPLET'
+                            values 'x64-linux', 'x86-linux'
+                        }
+                    }
+                    exclude {
+                        axis {
+                            name 'PLATFORM'
+                            values 'win'
+                        }
+                        axis {
+                            name 'DOCKER_FILE'
+                            values 'Dockerfile.ubuntu-focal', 'Dockerfile.ubuntu-jammy', 'Dockerfile.ubuntu-xenial'
+                        }
+                    }
+                }
                 stages {
-                    // stage('Prebuild') {
-                    //     agent {
-                    //         label 'deploy'
-                    //     }
-                    //     steps {
-                    //         deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
-                    //     }
-                    // }
+                    stage('Prebuild') {
+                        agent {
+                            label 'deploy'
+                        }
+                        steps {
+                            deploy_badge(status_building(), env.PLATFORM, env.BUILD_TYPE, env.TARGET_TRIPLET, env.DOCKER_FILE)
+                        }
+                    }
                     stage('Windows-Stage') {
                         // agent any
                         when {
