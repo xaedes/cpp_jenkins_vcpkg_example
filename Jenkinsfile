@@ -3,8 +3,8 @@ def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
         withCredentials([sshUserPrivateKey(credentialsId: 'f4eca40b-b91c-4b0b-80aa-c783b3be6692', keyFileVariable: 'SSH_KEY_FILE')]) {
             sh """
-                echo "${env.JENKINS_URL}"
-                ssh -i "${env.SSH_KEY_FILE}" -p 2122 cistatus@\$(echo ${env.JENKINS_URL} | cut -d'/' -f3 | cut -d':' -f1) '
+                echo "\$JENKINS_URL"
+                ssh -i "\$SSH_KEY_FILE" -p 2122 cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
                     cd ~/files/
                     mkdir -p \$(dirname ${path}) || true
                     wget -O "${path}" "${url}"
