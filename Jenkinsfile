@@ -186,26 +186,26 @@ pipeline {
                                             bat 'git clean -x -f -f -d'
                                         }
                                     }
-                                    // stage("clean-win") {
-                                    //     steps {
-                                    //         bat ".\\ci.bat clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("tools-win") {
-                                    //     steps {
-                                    //         bat ".\\ci.bat tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("build-win") {
-                                    //     steps {
-                                    //         bat ".\\ci.bat build ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("test-win") {
-                                    //     steps {
-                                    //         bat ".\\ci.bat test ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
+                                    stage("clean-win") {
+                                        steps {
+                                            bat ".\\ci.bat clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("tools-win") {
+                                        steps {
+                                            bat ".\\ci.bat tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("build-win") {
+                                        steps {
+                                            bat ".\\ci.bat build ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("test-win") {
+                                        steps {
+                                            bat ".\\ci.bat test ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -245,26 +245,26 @@ pipeline {
                                             sh 'git clean -x -f -f -d'
                                         }
                                     }
-                                    // stage("clean-linux") {
-                                    //     steps {
-                                    //         sh "sh ./ci.sh clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("tools-linux") {
-                                    //     steps {
-                                    //         sh "sh ./ci.sh tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("build-linux") {
-                                    //     steps {
-                                    //         sh "sh ./ci.sh build ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
-                                    // stage("test-linux") {
-                                    //     steps {
-                                    //         sh "sh ./ci.sh test ${BUILD_TYPE} ${TARGET_TRIPLET}"
-                                    //     }
-                                    // }
+                                    stage("clean-linux") {
+                                        steps {
+                                            sh "sh ./ci.sh clean ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("tools-linux") {
+                                        steps {
+                                            sh "sh ./ci.sh tools ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("build-linux") {
+                                        steps {
+                                            sh "sh ./ci.sh build ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
+                                    stage("test-linux") {
+                                        steps {
+                                            sh "sh ./ci.sh test ${BUILD_TYPE} ${TARGET_TRIPLET}"
+                                        }
+                                    }
                                 }
                             }
                         }
