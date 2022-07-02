@@ -1,4 +1,17 @@
 
+def deploy_ci_status_page_linux_agent(path) {
+    withCredentials([sshUserPrivateKey(credentialsId: 'cistatus-deploy', keyFileVariable: 'SSH_KEY_FILE')]) {
+        sh """
+            scp -i "\$SSH_KEY_FILE" \\
+                -P 2122 \\
+                -o LogLevel=quiet \\
+                -o UserKnownHostsFile=/dev/null \\
+                -o StrictHostKeyChecking=no \\
+                .ci/cistatus.html \\
+                cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1):${path}
+        """
+    }
+}
 def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
     dir ('ci-status') {
         withCredentials([sshUserPrivateKey(credentialsId: 'cistatus-deploy', keyFileVariable: 'SSH_KEY_FILE')]) {
@@ -18,11 +31,15 @@ def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
     }
 }
 
+def get_cistatus_root() {
+    return 'xaedes/cpp_jenkins_vcpkg_example/'
+}
 def get_cache_dir(arch, distribution, build_type) {
-    return 'xaedes/cpp_jenkins_vcpkg_example/';
+    return get_cistatus_root()
 }
 def generate_badge_path(arch, distribution, build_type) {
-    path = "xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
+    cistatus_root = get_cistatus_root()
+    path = "${cistatus_root}${arch}_${distribution}_${build_type}_status.svg"
     return path.replaceAll(":", "_")
 }
 def generate_badge_url(arch, distribution, build_type, color) {
@@ -81,6 +98,7 @@ pipeline {
             steps {
                 checkout scm
                 stash 'source'
+                deploy_ci_status_page_linux_agent(get_cistatus_root())
             }
         }
         stage('MultiPlatform') {
