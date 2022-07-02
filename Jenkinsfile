@@ -8,7 +8,7 @@ def deploy_ci_status_page_linux_agent(path) {
                 -o UserKnownHostsFile=/dev/null \\
                 -o StrictHostKeyChecking=no \\
                 .ci/cistatus.html \\
-                cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1):${path}
+                cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1):files/${path}/index.html
         """
     }
 }
