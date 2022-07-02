@@ -2,19 +2,13 @@
 def deploy_badge_file_linux_agent(path, url, slug) {
     dir ('ci-status') {
         sshagent(['f4eca40b-b91c-4b0b-80aa-c783b3be6692']) {
-            sh '''#!/bin/bash
-                # rm -rf ci-status || true
-                git clone -b main git@github.com:xaedes/ci-status.git || true
-                cd ci-status
-                git config user.email "xaedes+jenkins@gmail.com"
-                git config user.name "xaedes_jenkins"                
-                git pull --ff-only origin main
-                git clean -x -f -f -d
-            '''
-            sh "cd ci-status && mkdir -p \$(dirname ${path}) || true"
-            sh "cd ci-status && wget -O '${path}' '${url}'"
-            sh "cd ci-status && git add '${path}'"
-            sh "cd ci-status && git -c 'user.email=xaedes+jenkins@gmail.com' -c 'user.name=xaedes_jenkins' commit -m '$slug' && git push origin main || true"
+            sh """
+                echo "${env.JENKINS_URL}"
+                ssh -p 2122 cistatus@\$(echo ${env.JENKINS_URL} | cut -d'/' -f3 | cut -d':' -f1) '
+                    mkdir -p \$(dirname ${path}) || true
+                    wget -O "${path}" "${url}"
+                '
+            """
             
         }
     }
@@ -61,6 +55,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
 
     deploy_badge_file_linux_agent(path, url, path)
 }
+
 def status_success()  { return "success" }
 def status_failure()  { return "failure" }
 def status_building() { return "building" }
