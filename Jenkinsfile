@@ -7,7 +7,7 @@ def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
                     cd ~/files/
                     mkdir -p "${cache_dir}" || true
                     mkdir -p "\$(dirname ${path})" || true
-                    CACHED="${cache_dir}/\$(echo ${url} | cut -d/ -f5 | tr :- _)"
+                    CACHED="${cache_dir}/\$(echo ${url} | cut -d/ -f5 | tr :- _ | cut -d. -f0).svg"
                     if [ ! -f "\${CACHED}" ]; then
                         wget -O "\${CACHED}" "${url}"
                     fi
