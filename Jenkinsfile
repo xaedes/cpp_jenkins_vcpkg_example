@@ -5,8 +5,8 @@ def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
             sh """
                 ssh -i "\$SSH_KEY_FILE" -p 2122 -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no cistatus@\$(echo \$JENKINS_URL | cut -d'/' -f3 | cut -d':' -f1) '
                     cd ~/files/
-                    mkdir -p ${cache_dir} || true
-                    mkdir -p \$(dirname ${path}) || true
+                    mkdir -p "${cache_dir}" || true
+                    mkdir -p "\$(dirname ${path})" || true
                     CACHED="${cache_dir}/\$(echo ${url} | cut -d/ -f5 | tr :- _)"
                     if [ ! -f "\${CACHED}" ]; then
                         wget -O "\${CACHED}" "${url}"
@@ -18,6 +18,9 @@ def deploy_badge_file_linux_agent(cache_dir, path, url, slug) {
     }
 }
 
+def get_cache_dir(arch, distribution, build_type) {
+    return 'xaedes/cpp_jenkins_vcpkg_example/';
+}
 def generate_badge_path(arch, distribution, build_type) {
     path = "xaedes/cpp_jenkins_vcpkg_example/${arch}_${distribution}_${build_type}_status.svg"
     return path.replaceAll(":", "_")
@@ -49,6 +52,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     arch = triplet_archs[target_triplet]
     color = status_colors[status]
     
+    cache_dir = get_cache_dir(arch, distribution, build_type)
     path = generate_badge_path(arch, distribution, build_type)
     url = generate_badge_url(arch, distribution, build_type, color)
 
@@ -57,7 +61,7 @@ def deploy_badge(status, platform, build_type, target_triplet, docker_file)
     echo "path: ${path}"
     echo "url: ${url}"
 
-    deploy_badge_file_linux_agent(path, url, path)
+    deploy_badge_file_linux_agent(cache_dir, path, url, path)
 }
 
 def status_success()  { return "success" }
